@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Convite de amizade — Slime Story: Farm &amp; Craft</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 20px 64px; line-height: 1.6; color: #222; background: #fdfaf3; }
+  @media (prefers-color-scheme: dark) { body { background: #1b1812; color: #ece6d8; } .card { background: #241f16 !important; border-color: #444 !important; } .code { background: #1b1812 !important; } .btn.alt { background: #3a3122 !important; color: #ece6d8 !important; } }
+  h1 { font-size: 1.6rem; margin: 0 0 8px; }
+  .lead { margin: 0 0 20px; }
+  .card { border: 1px solid #e3d9c4; border-radius: 14px; padding: 18px; background: #fff; margin: 16px 0; }
+  .code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 1rem; word-break: break-all; background: #f3ead9; padding: 10px 12px; border-radius: 8px; margin: 8px 0 12px; }
+  .btn { display: block; text-align: center; text-decoration: none; font-weight: 700; font-size: 1.05rem; padding: 14px; border-radius: 12px; border: 0; width: 100%; box-sizing: border-box; cursor: pointer; margin: 10px 0 0; background: #5aa83c; color: #fff; }
+  .btn.alt { background: #f3ead9; color: #4a3200; }
+  .muted { color: #888; font-size: 0.9rem; }
+  #bad { display: none; }
+</style>
+</head>
+<body>
+<div id="ok">
+  <h1 id="title"></h1>
+  <p class="lead" id="lead"></p>
+  <a class="btn" id="open" href="#"></a>
+  <div class="card">
+    <strong id="noGameTitle"></strong>
+    <p id="noGameText"></p>
+    <a class="btn" id="play" href="https://play.google.com/store/apps/details?id=com.rigamurastudios.slimestory"></a>
+  </div>
+  <div class="card">
+    <strong id="codeTitle"></strong>
+    <div class="code" id="code"></div>
+    <button class="btn alt" id="copy" type="button"></button>
+    <p class="muted" id="codeHelp"></p>
+  </div>
+</div>
+<div id="bad"><h1 id="badTitle"></h1><p id="badText"></p></div>
+<script>
+(function () {
+  var pt = (navigator.language || "").toLowerCase().indexOf("pt") === 0;
+  var T = pt ? {
+    title: "Convite de amizade", leadName: " te convidou para ser amigo no Slime Story: Farm & Craft!", leadAnon: "Você recebeu um convite de amizade no Slime Story: Farm & Craft!",
+    open: "Abrir no jogo", noGameTitle: "Ainda não tem o jogo?", noGameText: "Instale pela Google Play e depois toque no link do convite de novo.",
+    play: "Baixar na Google Play", codeTitle: "Código de amigo", copy: "Copiar código", copied: "Copiado!",
+    codeHelp: "Se o jogo não abrir sozinho: copie o código, abra o jogo e vá em Amigos > Adicionar > Colar.",
+    badTitle: "Convite inválido", badText: "Este link de convite está incompleto. Peça para o seu amigo enviar de novo pelo botão Compartilhar, em Amigos > Adicionar."
+  } : {
+    title: "Friend invite", leadName: " invited you to be friends in Slime Story: Farm & Craft!", leadAnon: "You got a friend invite in Slime Story: Farm & Craft!",
+    open: "Open in the game", noGameTitle: "Don't have the game yet?", noGameText: "Install it from Google Play, then tap the invite link again.",
+    play: "Get it on Google Play", codeTitle: "Friend code", copy: "Copy code", copied: "Copied!",
+    codeHelp: "If the game doesn't open by itself: copy the code, open the game and go to Friends > Add > Paste.",
+    badTitle: "Invalid invite", badText: "This invite link is incomplete. Ask your friend to send it again with the Share button in Friends > Add."
+  };
+  if (!pt) document.documentElement.lang = "en";
+  function $(id) { return document.getElementById(id); }
+  var q = new URLSearchParams(location.search);
+  var code = (q.get("c") || "").trim();
+  var name = (q.get("n") || "").replace(/[<>\u0000-\u001f]/g, "").trim().slice(0, 24);
+  document.title = T.title + " — Slime Story: Farm & Craft";
+  if (!/^[A-Za-z0-9]{16,48}$/.test(code)) {
+    $("ok").style.display = "none"; $("bad").style.display = "block";
+    $("badTitle").textContent = T.badTitle; $("badText").textContent = T.badText;
+    return;
+  }
+  $("title").textContent = T.title;
+  if (name) { var b = document.createElement("strong"); b.textContent = name; $("lead").appendChild(b); $("lead").appendChild(document.createTextNode(T.leadName)); }
+  else $("lead").textContent = T.leadAnon;
+  // Botão "Abrir no jogo": intent do Android para o mesmo link (abre o jogo se instalado; senão cai na Play). Útil quando o navegador não repassou o link.
+  var play = "https://play.google.com/store/apps/details?id=com.rigamurastudios.slimestory";
+  var path = "rigamura.github.io/friend/" + location.search;
+  if (/android/i.test(navigator.userAgent)) {
+    $("open").href = "intent://" + path + "#Intent;scheme=https;package=com.rigamurastudios.slimestory;S.browser_fallback_url=" + encodeURIComponent(play) + ";end";
+    $("open").textContent = T.open;
+  } else $("open").style.display = "none";
+  $("noGameTitle").textContent = T.noGameTitle; $("noGameText").textContent = T.noGameText; $("play").textContent = T.play;
+  $("codeTitle").textContent = T.codeTitle; $("code").textContent = code; $("codeHelp").textContent = T.codeHelp;
+  $("copy").textContent = T.copy;
+  $("copy").addEventListener("click", function () {
+    var done = function () { $("copy").textContent = T.copied; setTimeout(function () { $("copy").textContent = T.copy; }, 2000); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText("[" + code + "]").then(done, done); else done();
+  });
+})();
+</script>
+</body>
+</html>

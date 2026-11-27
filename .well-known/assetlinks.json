@@ -1,0 +1,14 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.rigamurastudios.slimestory",
+      "sha256_cert_fingerprints": [
+        "A3:77:59:4B:2B:7C:D3:36:AD:EB:6A:C0:6E:8D:E0:08:3B:C1:08:1C:C4:A2:71:7D:41:95:96:96:FB:22:4A:AB",
+        "11:95:D2:C7:C3:22:24:7B:48:19:5F:F8:10:27:88:E5:54:3E:2D:B0:A2:70:24:5F:E9:5D:9F:C9:5B:C6:D8:0C",
+        "CC:AF:A6:64:07:1D:90:F7:12:85:AD:0E:3C:4F:30:08:9A:05:EA:17:F9:2D:A2:4F:37:FB:C3:29:D5:E3:DE:44"
+      ]
+    }
+  }
+]
